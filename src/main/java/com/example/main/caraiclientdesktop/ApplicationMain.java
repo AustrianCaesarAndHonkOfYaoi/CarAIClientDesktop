@@ -10,9 +10,10 @@ import java.io.IOException;
 public class ApplicationMain extends Application {
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(ApplicationMain.class.getResource("hello-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 320, 240);
-        stage.setTitle("Hello!");
+        FXMLLoader fxmlLoader = new FXMLLoader(ApplicationMain.class.getResource("ControllerMain.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), 900, 600);
+        
+        stage.setTitle("Car AI");
         stage.setScene(scene);
         stage.show();
     }
