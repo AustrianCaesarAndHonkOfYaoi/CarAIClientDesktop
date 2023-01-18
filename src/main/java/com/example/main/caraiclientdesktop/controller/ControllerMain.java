@@ -65,8 +65,8 @@ public class ControllerMain implements Initializable {
         imgHelper.setcM(this);
         infoHelper.setcM(this);
 
-       // timer.schedule(infoHelper, 3000);
-       // timer.schedule(imgHelper, 3000);
+        timer.schedule(infoHelper, 3000);
+        timer.schedule(imgHelper, 3000);
     }
 
     public void forwards() {

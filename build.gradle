@@ -3,6 +3,7 @@ plugins {
     id 'application'
     id 'org.openjfx.javafxplugin' version '0.0.13'
     id 'org.beryx.jlink' version '2.25.0'
+    id 'org.javamodularity.moduleplugin' version '1.1.1'
 }
 
 group 'com.example.main'
@@ -25,7 +26,7 @@ tasks.withType(JavaCompile) {
 
 application {
     mainModule = 'com.example.main.caraiclientdesktop'
-    mainClass = 'com.example.main.caraiclientdesktop.HelloApplication'
+    mainClass = 'com.example.main.caraiclientdesktop.ApplicationMain'
 }
 
 javafx {
@@ -35,7 +36,9 @@ javafx {
 
 dependencies {
 
-
+    implementation 'commons-validator:commons-validator:1.7'
+    implementation 'org.projectlombok:lombok:1.18.24'
+    annotationProcessor 'org.projectlombok:lombok:1.18.24'
     testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.4'

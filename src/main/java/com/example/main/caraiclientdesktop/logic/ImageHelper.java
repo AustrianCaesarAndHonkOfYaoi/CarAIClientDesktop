@@ -19,29 +19,23 @@ public class ImageHelper extends TimerTask {
 
     @Override
     public void run() {
-      //  changeImageRequest();
+        //  changeImageRequest();
     }
 
-  /*  private void changeImageRequest() {
+    private void changeImageRequest() {
 
-        DateTimeFormatter date = DateTimeFormatter.ISO_INSTANT;
-        String name = date.format(Instant.now());
-        Image img = new Image();
-        img.setSrc(new StreamResource(name, () -> {
-            try {
-                URL url = new URL("http://localhost:8080/camera/getPicture");
-                InputStream fis = url.openStream();
-                return fis;
-            } catch (FileNotFoundException | MalformedURLException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            return null;
+        try {
+            URL url = new URL("http://localhost:8080/camera/getPicture");
+            InputStream fis = url.openStream();
+            Image image = new Image(fis);
+            iV.setImage(image);
+        } catch (FileNotFoundException | MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
-        ));
-        cM.getCurrentImage().setImage(img);
-    }*/
+
+    }
 
     public void setcM(ControllerMain cM) {
         this.cM = cM;

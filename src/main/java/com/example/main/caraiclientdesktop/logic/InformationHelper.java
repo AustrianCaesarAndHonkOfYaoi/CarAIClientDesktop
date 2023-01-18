@@ -49,7 +49,7 @@ public class InformationHelper extends TimerTask {
             e.printStackTrace();
         }
     }
-   /* private void setLabels(){
+    private void setLabels(){
         Label label;
         label=cM.getNameL();
         label.setText(cpuData.getName());
@@ -77,7 +77,7 @@ public class InformationHelper extends TimerTask {
 
 
 
-    }*/
+    }
     public void setcM(ControllerMain cM){
         this.cM = cM;
     }
