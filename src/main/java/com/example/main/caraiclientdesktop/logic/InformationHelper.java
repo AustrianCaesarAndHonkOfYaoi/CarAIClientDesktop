@@ -4,6 +4,7 @@ import com.example.main.caraiclientdesktop.controller.ControllerMain;
 import com.example.main.caraiclientdesktop.data.CPUData;
 import com.example.main.caraiclientdesktop.data.GBMemoryData;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import javafx.application.Platform;
 import javafx.scene.control.Label;
 
 import java.io.IOException;
@@ -20,13 +21,15 @@ public class InformationHelper extends TimerTask {
     private GBMemoryData memoryData;
     private CPUData cpuData;
     private ControllerMain cM;
+
     @Override
     public void run() {
         getData("http://localhost:8080/monitoring/memory/gb");
         getData("http://localhost:8080/monitoring/cpu");
-       // setLabels();
+        setLabels();
 
     }
+
     private void getData(String link) {
         try {
             HttpRequest request = HttpRequest.newBuilder()
@@ -49,36 +52,43 @@ public class InformationHelper extends TimerTask {
             e.printStackTrace();
         }
     }
-    private void setLabels(){
-        Label label;
-        label=cM.getNameL();
-        label.setText(cpuData.getName());
 
-        label=cM.getCpuL();
-        label.setText(""+cpuData.getCpuLoad());
+    private void setLabels() {
 
-        label=cM.getArchitectureL();
-        label.setText(cpuData.getArchitecture());
 
-        label=cM.getTemperatureL();
-        label.setText(""+cpuData.getTemperature());
+        Platform.runLater(() -> {
+            Label label = cM.getNameL();
 
-        label=cM.getModelL();
-        label.setText(cpuData.getModel());
+            label.setText(cpuData.getName());
 
-        label=cM.getFrequenzyL();
-        label.setText(""+cpuData.getFrequency());
+            label = cM.getCpuL();
+            label.setText("" + cpuData.getCpuLoad());
 
-        label=cM.getVendorL();
-        label.setText(cpuData.getVendor());
+            label = cM.getArchitectureL();
+            label.setText(cpuData.getArchitecture());
 
-        label=cM.getTotalRAM();
-        label.setText(""+memoryData.getTotal());
+            label = cM.getTemperatureL();
+            label.setText("" + cpuData.getTemperature());
 
+            label = cM.getModelL();
+            label.setText(cpuData.getModel());
+
+            label = cM.getFrequenzyL();
+            label.setText("" + cpuData.getFrequency());
+
+            label = cM.getVendorL();
+            label.setText(cpuData.getVendor());
+
+            label = cM.getTotalRAM();
+            label.setText("" + memoryData.getTotal());
+
+
+        });
 
 
     }
-    public void setcM(ControllerMain cM){
+
+    public void setcM(ControllerMain cM) {
         this.cM = cM;
     }
 

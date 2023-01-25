@@ -16,7 +16,9 @@ public class ControllerSetup {
     }
     private void checkIP(){
        InetAddressValidator validator = InetAddressValidator.getInstance();
-       validator.isValidInet4Address(inputIP.getText());
+       boolean t=validator.isValidInet4Address(inputIP.getText());
+        System.out.println(t);
+
 
     }
 }
