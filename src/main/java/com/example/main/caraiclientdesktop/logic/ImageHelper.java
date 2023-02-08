@@ -1,7 +1,6 @@
 package com.example.main.caraiclientdesktop.logic;
 
 import com.example.main.caraiclientdesktop.controller.ControllerMain;
-import javafx.application.Platform;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
@@ -18,29 +17,18 @@ public class ImageHelper extends TimerTask {
     private ControllerMain cM;
     private ImageView iV;
 
+
+
     @Override
     public void run() {
-         // changeImageRequest();
+        changeImageRequest();
     }
 
     private void changeImageRequest() {
-        Platform.runLater(()->{
-            try {
-                URL url = new URL("http://localhost:8080/camera/getPicture");
-                InputStream fis = url.openStream();
-                Image image = new Image(fis);
-                iV.setImage(image);
-            } catch (FileNotFoundException | MalformedURLException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        });
+
 
 
     }
 
-    public void setcM(ControllerMain cM) {
-        this.cM = cM;
-    }
+
 }

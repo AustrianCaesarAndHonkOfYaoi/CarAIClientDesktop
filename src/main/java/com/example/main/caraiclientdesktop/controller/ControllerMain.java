@@ -14,10 +14,14 @@ import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -26,6 +30,9 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.ResourceBundle;
 import java.util.Timer;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 
 public class ControllerMain implements Initializable {
@@ -49,8 +56,12 @@ public class ControllerMain implements Initializable {
     private Slider velocitySlide;
     @FXML
     private ImageView currentImage;
-
+    private ControllerMain currentMainController;
     private final static HttpClient httpClient = HttpClient.newBuilder().build();
+    private final ObjectMapper objectMapper = new ObjectMapper();
+    private GBMemoryData memoryData;
+    private CPUData cpuData;
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -58,15 +69,8 @@ public class ControllerMain implements Initializable {
         velocitySlide.setMax(3);
         velocitySlide.setBlockIncrement(0.5);
 
-        Timer timer = new Timer();
-        InformationHelper infoHelper = new InformationHelper();
-        ImageHelper imgHelper = new ImageHelper();
+        setRunners();
 
-        imgHelper.setcM(this);
-        infoHelper.setcM(this);
-
-        timer.schedule(infoHelper, 3000);
-        timer.schedule(imgHelper, 3000);
     }
 
     public void forwards() {
@@ -130,39 +134,96 @@ public class ControllerMain implements Initializable {
     }
 
 
-    public Label getNameL() {
-        return nameL;
+    public void setCurrentMainController(ControllerMain currentMainController) {
+        this.currentMainController = currentMainController;
     }
 
-    public Label getModelL() {
-        return modelL;
+    public void setRunners() {
+
+        Runnable imageRequest = () -> {
+            try {
+                URL url = new URL("http://localhost:8080/camera/getPicture");
+                InputStream fis = url.openStream();
+                Image image = new Image(fis);
+
+                currentImage.setImage(image);
+            } catch (FileNotFoundException | MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
+        };
+        Runnable infos = () -> {
+            getData("http://localhost:8080/monitoring/memory/gb");
+            getData("http://localhost:8080/monitoring/cpu");
+            setLabels();
+
+        };
+        ScheduledExecutorService imageExecutor = Executors
+                .newSingleThreadScheduledExecutor();
+
+        ScheduledExecutorService informationExecutor = Executors
+                .newSingleThreadScheduledExecutor();
+        imageExecutor.scheduleAtFixedRate(imageRequest, 0, 3000, TimeUnit.MILLISECONDS);
+        informationExecutor.scheduleAtFixedRate(infos, 0, 3000, TimeUnit.MILLISECONDS);
     }
 
-    public Label getVendorL() {
-        return vendorL;
+    private void getData(String link) {
+        try {
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(new URI(link))
+                    .GET()
+                    .build();
+
+            //JSON FILE handlen
+            HttpResponse<String> json = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+            if (link.contains("memory")) {
+                memoryData = objectMapper.readValue(json.body(), GBMemoryData.class);
+
+            } else {
+                cpuData = objectMapper.readValue(json.body(), CPUData.class);
+
+            }
+
+        } catch (URISyntaxException | IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
-    public Label getArchitectureL() {
-        return architectureL;
-    }
+    private void setLabels() {
 
-    public Label getTemperatureL() {
-        return temperatureL;
-    }
 
-    public Label getFrequenzyL() {
-        return frequenzyL;
-    }
+        Platform.runLater(() -> {
 
-    public Label getCpuL() {
-        return cpuL;
-    }
 
-    public Label getTotalRAM() {
-        return totalRAM;
-    }
+            nameL.setText(cpuData.getName());
 
-    public ImageView getCurrentImage() {
-        return currentImage;
+
+            cpuL.setText("" + cpuData.getCpuLoad());
+
+
+            architectureL.setText(cpuData.getArchitecture());
+
+
+            temperatureL.setText("" + cpuData.getTemperature());
+
+
+            modelL.setText(cpuData.getModel());
+
+
+            frequenzyL.setText("" + cpuData.getFrequency());
+
+
+            vendorL.setText(cpuData.getVendor());
+
+
+            totalRAM.setText("" + memoryData.getTotal());
+
+
+        });
+
+
     }
 }

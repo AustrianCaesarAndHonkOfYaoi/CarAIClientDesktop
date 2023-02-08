@@ -4,9 +4,9 @@ import lombok.Data;
 
 @Data
 public class GBMemoryData {
-  float total;
-  float used;
-  float free;
+    private float total;
+    private float used;
+    private float free;
 
 
 }
