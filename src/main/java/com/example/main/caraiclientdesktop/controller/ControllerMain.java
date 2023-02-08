@@ -1,8 +1,7 @@
 package com.example.main.caraiclientdesktop.controller;
 
 
-import com.example.main.caraiclientdesktop.logic.ImageHelper;
-import com.example.main.caraiclientdesktop.logic.InformationHelper;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.example.main.caraiclientdesktop.ApplicationMain;
 import com.example.main.caraiclientdesktop.data.CPUData;
