@@ -1,5 +1,6 @@
 package com.example.main.caraiclientdesktop.controller;
 
+import com.example.main.caraiclientdesktop.logic.CommonCommands;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -25,6 +26,7 @@ public class ControllerSetup implements Initializable {
 
 
     private final static HttpClient httpClient = HttpClient.newBuilder().build();
+    private final static CommonCommands commands = new CommonCommands();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -39,8 +41,9 @@ public class ControllerSetup implements Initializable {
     private void checkIP() {
         InetAddressValidator validator = InetAddressValidator.getInstance();
         boolean t = validator.isValidInet4Address(inputIP.getText());
-        System.out.println(t);
-
+        if (t) {
+            commands.writeToFile("src\\assets\\address.txt", inputIP.getText());
+        }
 
     }
 
@@ -64,18 +67,18 @@ public class ControllerSetup implements Initializable {
             }
 
             System.out.println(result);
-            String savedContent= readFile();
-            if(savedContent.equals("false")&&result.equals("true")){
-               disable();
-               checkBoxManual.setSelected(false);
+            String savedContent = commands.readFile("src\\assets\\savedFailStatus.txt");
+            if (savedContent.equals("false") && result.equals("true")) {
+                disable();
+                checkBoxManual.setSelected(false);
 
             }
-            if(savedContent.equals("true")&&result.equals("false")){
+            if (savedContent.equals("true") && result.equals("false")) {
                 checkBoxManual.setSelected(true);
 
                 enable();
             }
-            if(savedContent.equals("true")&&result.equals("true")){
+            if (savedContent.equals("true") && result.equals("true")) {
                 checkBoxManual.setSelected(true);
             }
 
@@ -85,40 +88,9 @@ public class ControllerSetup implements Initializable {
         }
     }
 
-    private String readFile() {
-        FileInputStream inputStream = null;
-        Scanner sc = null;
-        String content = "";
-        try {
-
-            inputStream = new FileInputStream("src\\assets\\savedFailStatus.txt");
-            sc = new Scanner(inputStream, StandardCharsets.UTF_8);
 
 
-            while (sc.hasNextLine()) {
-               content = sc.nextLine();
-            }
-            // note that Scanner suppresses exceptions
-            if (sc.ioException() != null) {
-                throw sc.ioException();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if (inputStream != null) {
-                try {
-                    inputStream.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            if (sc != null) {
-                sc.close();
-            }
-        }
-        return content;
-    }
-    private void disable()   {
+    private void disable() {
         try {
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(new URI("http://localhost:8080/failsafe/disableManualFailsafe"))
@@ -131,7 +103,8 @@ public class ControllerSetup implements Initializable {
             throw new RuntimeException(e);
         }
     }
-    private void enable()   {
+
+    private void enable() {
         try {
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(new URI("http://localhost:8080/failsafe/enableManualFailsafe"))
@@ -144,31 +117,17 @@ public class ControllerSetup implements Initializable {
             throw new RuntimeException(e);
         }
     }
-    private void addListener(){
+
+    private void addListener() {
         checkBoxManual.selectedProperty().addListener((observable, oldValue, newValue) -> {
-           if(!checkBoxManual.isSelected()){
-               disable();
-               writeToFile();
-
-
-           }else{
-               enable();
-               writeToFile();
-
-           }
-
+            if (!checkBoxManual.isSelected()) {
+                disable();
+            } else {
+                enable();
+            }
+            commands.writeToFile("src\\assets\\savedFailStatus.txt","" + checkBoxManual.isSelected());
         });
     }
-    public void writeToFile() {
-        try {
-            File fout = new File("src\\assets\\savedFailStatus.txt");
-            FileOutputStream fos = new FileOutputStream(fout);
 
-            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(fos));
-            bw.write(""+checkBoxManual.isSelected());
-            bw.close();
-        } catch (IOException ignored) {
 
-        }
-    }
 }

@@ -50,7 +50,7 @@
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.main.caraiclientdesktop.controller.ControllerMain">
+<VBox prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.main.caraiclientdesktop.controller.ControllerMain">
   <children>
     <MenuBar VBox.vgrow="NEVER">
       <menus>
@@ -109,13 +109,13 @@
                   <Label layoutX="45.0" layoutY="223.0" text="Temperatur" />
                   <Label layoutX="45.0" layoutY="199.0" text="Frequenzy" />
                   <Label layoutX="45.0" layoutY="175.0" text="CPU-Load" />
-                  <Label fx:id="nameL" layoutX="142.0" layoutY="79.0" prefHeight="17.0" prefWidth="71.0" />
-                  <Label fx:id="vendorL" layoutX="142.0" layoutY="103.0" prefWidth="71.0" />
-                  <Label fx:id="architectureL" layoutX="142.0" layoutY="127.0" prefWidth="71.0" />
-                  <Label fx:id="modelL" layoutX="142.0" layoutY="151.0" prefWidth="71.0" />
-                  <Label fx:id="temperatureL" layoutX="142.0" layoutY="223.0" prefWidth="71.0" />
-                  <Label fx:id="frequenzyL" layoutX="142.0" layoutY="199.0" prefWidth="71.0" />
-                  <Label fx:id="cpuL" layoutX="142.0" layoutY="175.0" prefWidth="71.0" />
+                  <Label fx:id="nameL" layoutX="142.0" layoutY="79.0" prefHeight="17.0" />
+                  <Label fx:id="vendorL" layoutX="142.0" layoutY="103.0" />
+                  <Label fx:id="architectureL" layoutX="142.0" layoutY="127.0" />
+                  <Label fx:id="modelL" layoutX="142.0" layoutY="151.0" />
+                  <Label fx:id="temperatureL" layoutX="142.0" layoutY="223.0" />
+                  <Label fx:id="frequenzyL" layoutX="142.0" layoutY="199.0" />
+                  <Label fx:id="cpuL" layoutX="142.0" layoutY="175.0" />
                   <Label alignment="CENTER" layoutX="90.0" layoutY="51.0" style="&#10;" text="CPU" textAlignment="CENTER" wrapText="false">
                      <font>
                         <Font size="18.0" fx:id="x11" />
@@ -133,7 +133,7 @@
                      </textFill>
                   </Label>
                   <Label layoutX="45.0" layoutY="297.0" text="Total" />
-                  <Label fx:id="totalRAM" layoutX="142.0" layoutY="297.0" prefWidth="71.0" />
+                  <Label fx:id="totalRAM" layoutX="142.0" layoutY="297.0" />
           </children>
         </AnchorPane>
       </items>

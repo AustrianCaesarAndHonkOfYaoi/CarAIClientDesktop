@@ -2,6 +2,7 @@ package com.example.main.caraiclientdesktop.controller;
 
 
 
+import com.example.main.caraiclientdesktop.logic.CommonCommands;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.example.main.caraiclientdesktop.ApplicationMain;
 import com.example.main.caraiclientdesktop.data.CPUData;
@@ -57,6 +58,8 @@ public class ControllerMain implements Initializable {
     private ImageView currentImage;
     private ControllerMain currentMainController;
     private final static HttpClient httpClient = HttpClient.newBuilder().build();
+    private final static CommonCommands commands = new CommonCommands();
+    private  String ip = commands.readFile("src\\assets\\address.txt");
     private final ObjectMapper objectMapper = new ObjectMapper();
     private GBMemoryData memoryData;
     private CPUData cpuData;
@@ -73,25 +76,25 @@ public class ControllerMain implements Initializable {
     }
 
     public void forwards() {
-        sendRequestToControl("http://localhost:8080/car/moveForward/2000/");
+        sendRequestToControl("http://"+ip+":8080/car/moveForward/2000/");
 
     }
 
     public void left() {
 
-        sendRequestToControl("http://localhost:8080/car/steerLeft/1000/");
+        sendRequestToControl("http://"+ip+":8080/car/steerLeft/1000/");
 
     }
 
     public void back() {
 
-        sendRequestToControl("http://localhost:8080/car/moveBackwards/2000/");
+        sendRequestToControl("http://"+ip+":8080/car/moveBackwards/2000/");
 
     }
 
     public void right() {
 
-        sendRequestToControl("http://localhost:8080/car/steerRight/1000/");
+        sendRequestToControl("http://"+ip+":8080/car/steerRight/1000/");
     }
 
     private void sendRequestToControl(String link) {
@@ -141,7 +144,7 @@ public class ControllerMain implements Initializable {
 
         Runnable imageRequest = () -> {
             try {
-                URL url = new URL("http://localhost:8080/camera/getPicture");
+                URL url = new URL("http://"+ip+":8080/camera/getPicture");
                 InputStream fis = url.openStream();
                 Image image = new Image(fis);
 
@@ -154,8 +157,8 @@ public class ControllerMain implements Initializable {
 
         };
         Runnable infos = () -> {
-            getData("http://localhost:8080/monitoring/memory/gb");
-            getData("http://localhost:8080/monitoring/cpu");
+            getData("http://"+ip+":8080/monitoring/memory/gb");
+            getData("http://"+ip+":8080/monitoring/cpu");
             setLabels();
 
         };
