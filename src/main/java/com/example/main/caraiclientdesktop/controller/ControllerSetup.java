@@ -1,22 +1,20 @@
 package com.example.main.caraiclientdesktop.controller;
 
 import com.example.main.caraiclientdesktop.logic.CommonCommands;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
 import org.apache.commons.validator.routines.InetAddressValidator;
 
-import java.io.*;
-import java.net.*;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.ResourceBundle;
-import java.util.Scanner;
 
 public class ControllerSetup implements Initializable {
     @FXML
@@ -38,7 +36,7 @@ public class ControllerSetup implements Initializable {
         checkIP();
     }
 
-    private void checkIP() {
+    public void checkIP() {
         InetAddressValidator validator = InetAddressValidator.getInstance();
         boolean t = validator.isValidInet4Address(inputIP.getText());
         if (t) {
@@ -129,5 +127,11 @@ public class ControllerSetup implements Initializable {
         });
     }
 
+    public CheckBox getCheckBoxManual() {
+        return checkBoxManual;
+    }
 
+    public TextField getInputIP() {
+        return inputIP;
+    }
 }
