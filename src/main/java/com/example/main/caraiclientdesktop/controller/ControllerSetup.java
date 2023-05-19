@@ -25,9 +25,11 @@ public class ControllerSetup implements Initializable {
 
     private final static HttpClient httpClient = HttpClient.newBuilder().build();
     private final static CommonCommands commands = new CommonCommands();
+    private String ip = commands.readFile("src\\assets\\address.txt");
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+
         getCurrentStateOfFailsafe();
         addListener();
     }
@@ -48,7 +50,7 @@ public class ControllerSetup implements Initializable {
     private void getCurrentStateOfFailsafe() {
         try {
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(new URI("http://localhost:8080/failsafe/getCurrentFailsafe"))
+                    .uri(new URI("http://" + ip + ":8080/failsafe/getCurrentFailsafe"))
                     .GET()
                     .build();
 
@@ -87,11 +89,10 @@ public class ControllerSetup implements Initializable {
     }
 
 
-
     private void disable() {
         try {
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(new URI("http://localhost:8080/failsafe/disableManualFailsafe"))
+                    .uri(new URI("http://" + ip + ":8080/failsafe/disableManualFailsafe"))
                     .GET()
                     .build();
 
@@ -105,7 +106,7 @@ public class ControllerSetup implements Initializable {
     private void enable() {
         try {
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(new URI("http://localhost:8080/failsafe/enableManualFailsafe"))
+                    .uri(new URI("http://" + ip + ":8080/failsafe/enableManualFailsafe"))
                     .GET()
                     .build();
 
@@ -123,15 +124,8 @@ public class ControllerSetup implements Initializable {
             } else {
                 enable();
             }
-            commands.writeToFile("src\\assets\\savedFailStatus.txt","" + checkBoxManual.isSelected());
+            commands.writeToFile("src\\assets\\savedFailStatus.txt", "" + checkBoxManual.isSelected());
         });
     }
 
-    public CheckBox getCheckBoxManual() {
-        return checkBoxManual;
-    }
-
-    public TextField getInputIP() {
-        return inputIP;
-    }
 }
